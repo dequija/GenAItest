@@ -1,0 +1,48 @@
+import java.util.Map;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+
+public class APIUtil {
+
+
+    public void setBaseUri() {
+        RestAssured.baseURI = ConfigUtil.getProperty("base.uri");
+    }
+    
+    public void setBaseUri(String property) {
+        RestAssured.baseURI = ConfigUtil.getProperty(property);
+    }
+	
+    public void addHeaders(Map<String, String> headers) {
+        RestAssured.given().headers(headers);
+    }
+    
+    public RequestSpecification createRequestWithHeaders(Map<String, String> headers) {
+        return RestAssured.given().headers(headers);
+    }
+    
+    public RequestSpecification createRequestWithHeaders(RequestSpecification requestSpec, Map<String, String> headers) {
+        return requestSpec.headers(headers);
+    }
+    
+    public RequestSpecification addJsonBody(RequestSpecification requestSpec, Object body) {
+        return requestSpec.contentType(ContentType.JSON).body(body);
+    }
+    
+    public Response apiGet(RequestSpecification requestSpec) {
+        return requestSpec
+                    .when()
+                    .get();
+    }
+
+    public Response apiGet(String endpoint, RequestSpecification requestSpec) {
+        return requestSpec
+                    .when()
+                    .get(endpoint);
+    }
+
+}
